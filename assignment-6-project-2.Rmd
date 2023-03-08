@@ -7,6 +7,10 @@ output: html_document
 
 <!-- https://rpubs.com/mrcuny/assignment-6-project-2 -->
 
+[GitHub Link to Rmd file](https://github.com/mrcuny/assignment-6-project-2/blob/main/assignment-6-project-2.Rmd)
+
+----
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
