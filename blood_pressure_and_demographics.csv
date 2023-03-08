@@ -1,0 +1,6 @@
+"id","gender","age","weight","height","systolic_1","diastolic_1","systolic_2","diastolic_2","smoking_status"
+1,"Male",59,209,NA,NA,NA,NA,68,"Never smoked"
+2,"Male",60,210,NA,NA,NA,NA,69,"Former smoker"
+3,"Male",54,188,178,108,70,131,82,"Never smoked"
+4,"Female",31,210,184,118,66,106,86,NA
+5,"Male",42,176,NA,NA,NA,NA,87,NA

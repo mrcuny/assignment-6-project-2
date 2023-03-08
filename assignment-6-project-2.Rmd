@@ -1,0 +1,128 @@
+---
+title: "Assignment 6 - Project 2"
+author: "Mohammed Rahman"
+date: "2023-03-06"
+output: html_document
+---
+
+<!-- https://rpubs.com/mrcuny/assignment-6-project-2 -->
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+I chose to use my own dataset for this assignment.
+
+Let's simulate the data:
+
+```{r}
+set.seed(123)
+
+# Create sample data
+df <- data.frame(
+  id = 1:5,
+  gender = sample(c("Male", "Female"), 5, replace = TRUE),
+  age = sample(18:65, 5, replace = TRUE),
+  weight = sample(120:220, 5, replace = TRUE),
+  height = sample(150:200, 5, replace = TRUE),
+  systolic_1 = sample(100:140, 5, replace = TRUE),
+  diastolic_1 = sample(60:90, 5, replace = TRUE),
+  systolic_2 = sample(100:140, 5, replace = TRUE),
+  diastolic_2 = sample(60:90, 5, replace = TRUE),
+  smoking_status = sample(c("Never smoked", "Current smoker", "Former smoker"), 5, replace = TRUE)
+)
+
+# Make some of the data missing
+df[sample(1:5, 3), 5:8] <- NA
+df[sample(1:5, 2), 10] <- NA
+
+# write the data to a csv file:
+write.csv(
+  x = df,
+  file = "blood_pressure_and_demographics.csv",
+  row.names = FALSE
+)
+```
+
+Read the data into R:
+
+```{r}
+blood_pressure_and_demographics <- read.csv(
+  file = "blood_pressure_and_demographics.csv"
+)
+
+# look at the first 10 rows:
+blood_pressure_and_demographics
+```
+
+Time to tidy and transform the data.
+
+Load the libraries to use:
+
+```{r message=FALSE, warning=FALSE}
+library(dplyr)
+library(tidyr)
+```
+
+
+First, reshape the dataset into long format:
+
+```{r}
+df_long <- blood_pressure_and_demographics %>%
+  pivot_longer(cols = c(systolic_1, diastolic_1, systolic_2, diastolic_2),
+               names_to = c(".value", "visit_number"),
+               names_sep = "_") %>%
+  mutate(visit_number = as.numeric(visit_number)) %>%
+  arrange(id, visit_number)
+
+df_long
+```
+
+Calculate the mean systolic and diastolic blood pressure for each individual and visit.
+
+To do that, group the dataframe by `id` and `visit_number` and summarize each group via mean.
+
+Finally drop the groups.
+
+```{r}
+bp_means <- df_long %>%
+  group_by(id, visit_number) %>%
+  summarize(
+    mean_systolic = mean(systolic),
+    mean_diastolic = mean(diastolic),
+    n_obs = n(),
+    .groups = "drop"
+  )
+
+bp_means
+```
+
+Join the blood pressure means back to the original dataset by `id` and `visit_number`:
+
+```{r}
+df_clean <- df_long %>%
+  select(-c(systolic, diastolic)) %>%
+  left_join(bp_means, by = c("id", "visit_number"))
+
+df_clean
+```
+
+The final output is a cleaned and transformed dataset that is ready for downstream analysis.
+
+## This week's discussion
+
+In this week’s discussion, you’re asked to find, discuss and cite another reference that shows how data can be used to provide insights to improving collaboration or another “soft skill” that is relevant to data scientists.
+
+----
+
+### Solution
+
+Data can be used to provide insights to improving collaboration within an organization. Decentralized decision-makers empowered with data insights and local knowledge can collaborate with different stakeholders, including customers and even competitors, to create the best outcome for the business. 
+
+A collaborative culture enabled by data insights allows employees to share insights and best practices across the organization and make the best decisions at the right moment.
+
+Therefore, fostering employee collaboration and promoting the usage of advanced analytics across the business can improve collaboration, a soft skill relevant to data scientists.
+
+### Reference
+
+Van Rijmenam, M. (2019, July 26). How Big Data will Drive Collaboration and Empowerment. Medium. Retrieved March 6, 2023, from https://medium.com/swlh/how-big-data-will-drive-collaboration-and-empowerment-d3bd7bebbcbc#

@@ -1,0 +1,11 @@
+name: Publish Document
+title:
+username:
+account: rpubs
+server: rpubs.com
+hostUrl: rpubs.com
+appId: https://api.rpubs.com/api/v1/document/1012028/0d57ce4efc78446db866e2c54956f3a0
+bundleId: https://api.rpubs.com/api/v1/document/1012028/0d57ce4efc78446db866e2c54956f3a0
+url: http://rpubs.com/mrcuny/1012028/edit
+when: 1678127009.64595
+lastSyncTime: 1678127009.64595
